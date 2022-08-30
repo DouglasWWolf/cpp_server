@@ -18,7 +18,7 @@ static vector<string> parse_tokens(const char* in)
     const int buffer_size = sizeof(token) - 1;
 
     // If we weren't given an input string, return an empty result;
-    if (in == nullptr) return result;
+    if (in == NULL) return result;
 
     // So long as there are input characters still to be processed...
     while (*in)
@@ -254,7 +254,7 @@ bool server_command_t::get_next(unsigned int *p_result)
     }
 
     // Otherwise, fill in the caller's output field
-    *p_result = stoi(token, nullptr, 0);
+    *p_result = stoi(token, NULL, 0);
 
     // Tell the caller that he has a valid token
     return true;
