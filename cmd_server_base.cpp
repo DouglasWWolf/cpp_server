@@ -6,6 +6,9 @@
 #include "cmd_server_base.h"
 using namespace std;
 
+
+static int s_to_i(const string& s)  {return strtol(s.c_str(), NULL, 0);}
+
 //==========================================================================================================
 // parse_tokens() - Parses an input string into a vector of tokens
 //==========================================================================================================
@@ -224,7 +227,7 @@ bool server_command_t::get_next(int *p_result)
     }
 
     // Otherwise, fill in the caller's output field
-    *p_result = stoi(token, NULL, 0);
+    *p_result = s_to_i(token);
 
     // Tell the caller that he has a valid token
     return true;
@@ -254,7 +257,7 @@ bool server_command_t::get_next(unsigned int *p_result)
     }
 
     // Otherwise, fill in the caller's output field
-    *p_result = stoi(token, NULL, 0);
+    *p_result = s_to_i(token);
 
     // Tell the caller that he has a valid token
     return true;
