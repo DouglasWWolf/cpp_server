@@ -224,7 +224,7 @@ bool server_command_t::get_next(int *p_result)
     }
 
     // Otherwise, fill in the caller's output field
-    *p_result = stoi(token, nullptr, 0);
+    *p_result = stoi(token, NULL, 0);
 
     // Tell the caller that he has a valid token
     return true;

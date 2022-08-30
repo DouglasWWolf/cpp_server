@@ -107,10 +107,10 @@ protected:
     server_command_t m_line;
 
     // Call this to report an "ok" result to the client
-    bool    pass(const char* fmt = nullptr, ...);
+    bool    pass(const char* fmt = NULL, ...);
 
     // Call this to report a "fail" result to the client
-    bool    fail(const char* failure, const char* fmt = nullptr, ...);
+    bool    fail(const char* failure, const char* fmt = NULL, ...);
 
     // This is a convenience method for reporting a syntax error
     bool    fail_syntax() {send("FAIL syntax\r\n"); return false;}
