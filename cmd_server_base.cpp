@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdarg.h>
 #include <vector>
 #include <string>
@@ -8,7 +9,8 @@
 using namespace std;
 
 
-static int s_to_i(const string& s)  {return strtol(s.c_str(), NULL, 0);}
+static int    s_to_i(const string& s)  {return strtol(s.c_str(), NULL, 0);}
+static double s_to_d(const string& s)  {return strtod(s.c_str(), NULL   );}
 
 //==========================================================================================================
 // parse_tokens() - Parses an input string into a vector of tokens
@@ -199,7 +201,7 @@ bool server_command_t::get_next(double *p_result)
     }
 
     // Otherwise, fill in the caller's output field
-    *p_result = stod(token);
+    *p_result = s_to_d(token);
 
     // Tell the caller that he has a valid token
     return true;
