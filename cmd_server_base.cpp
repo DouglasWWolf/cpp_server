@@ -6,82 +6,15 @@
 #include <string>
 #include <string.h>
 #include "cmd_server_base.h"
+#include "tokenizer.h"
 using namespace std;
 
 
 static int    s_to_i(const string& s)  {return strtol(s.c_str(), NULL, 0);}
 static double s_to_d(const string& s)  {return strtod(s.c_str(), NULL   );}
 
-//==========================================================================================================
-// parse_tokens() - Parses an input string into a vector of tokens
-//==========================================================================================================
-static vector<string> parse_tokens(const char* in)
-{
-    vector<string> result;
-    char           token[512];
+static CTokenizer tokenizer;
 
-    // The size of the buffer, allowing for a nul-byte to be padded at the end
-    const int buffer_size = sizeof(token) - 1;
-
-    // If we weren't given an input string, return an empty result;
-    if (in == NULL) return result;
-
-    // So long as there are input characters still to be processed...
-    while (*in)
-    {
-        // Point to the output buffer 
-        char* out = token;
-
-        // Skip over any leading spaces on the input
-        while (*in == ' ') in++;
-
-        // If we hit end-of-line, there are no more tokens to parse
-        if (*in == 0) break;
-
-        // Assume for the moment that we're not starting a quoted string
-        char in_quotes = 0;
-
-        // If this is a single or double quote-mark, remember it and skip past it
-        if (*in == '"' || *in == '\'') in_quotes = *in++;
-
-        // Loop until we've parsed this entire token...
-        while (*in)
-        {
-            // If we're parsing a quoted string...
-            if (in_quotes)
-            {
-                // If we've hit the ending quote-mark, we're done parsing this token
-                if (*in == in_quotes)
-                {
-                    ++in;
-                    break;
-                }
-            }
-
-            // Otherwise, we're not parsing a quoted string. A space or comma ends the token
-            else if (*in == ' ' || *in == ',') break;
-
-            // If this character will fit into the token buffer, append it
-            if ((out - token) < buffer_size) *out++ = *in++;
-        }
-
-        // nul-terminate the token string
-        *out = 0;
-
-        // Add the token to our result list
-        result.push_back(token);
-
-        // Skip over any trailing spaces in the input
-        while (*in == ' ') ++in;
-
-        // If there is a trailing comma, throw it away
-        if (*in == ',') ++in;
-    }
-
-    // Hand the caller a vector of tokens
-    return result;
-}
-//==========================================================================================================
 
 
 //==========================================================================================================
@@ -318,7 +251,7 @@ wait_for_connection:
         if (m_verbose) printf(">> %s\n", buffer);
 
         // Parse the buffer into a vector of tokens
-        m_line = parse_tokens(buffer);
+        m_line = tokenizer.parse(buffer);
 
         // Go handle this command
         handle_command();
