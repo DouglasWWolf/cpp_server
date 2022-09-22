@@ -62,6 +62,18 @@ static bool convert_tabs_to_spaces(char* in)
 
 
 //==========================================================================================================
+// assign() - Parses a raw command into tokens, saving both the tokens and the raw text
+//==========================================================================================================
+void server_command_t::assign(const char* raw)
+{
+    raw_text = raw;
+    m_tokens = tokenizer.parse(raw);
+    m_next_index = 1;
+}
+//==========================================================================================================
+
+
+//==========================================================================================================
 // get_first() - Returns the first token of the tokenized command string
 //==========================================================================================================
 string server_command_t::get_first(bool force_lower)
@@ -251,7 +263,7 @@ wait_for_connection:
         if (m_verbose) printf(">> %s\n", buffer);
 
         // Parse the buffer into a vector of tokens
-        m_line = tokenizer.parse(buffer);
+        m_line.assign(buffer);
 
         // Go handle this command
         handle_command();
@@ -309,6 +321,9 @@ void CCmdServerBase::send(const char* buffer, int length)
     
     // Send the string to the connected client
     m_socket.send(buffer, length);
+
+    // Allow the derived class to do something when we send a message
+    on_send(buffer, length);
 
     // Allow other threads to send data on over the socket
     mtx.unlock();

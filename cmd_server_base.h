@@ -31,14 +31,14 @@ public:
     // Default constructor
     server_command_t() {m_next_index = 1;}
 
-    // Constructor from a string vector
-    server_command_t(const std::vector<std::string> rhs) {fill_tokens(rhs);}
+    // Constructor from a string 
+    server_command_t(const std::string s) {assign(s.c_str());}
 
     // Copy constructor
-    server_command_t(const server_command_t& rhs) {fill_tokens(rhs.m_tokens);}
+    server_command_t(const server_command_t& rhs) {assign(rhs.raw_text.c_str());}
 
-    // Overloading the '=' operator so we can assign a string vector
-    void  operator=(const std::vector<std::string> rhs) {fill_tokens(rhs);}
+    // Assign the inptut text to this structure
+    void  assign(const char* raw);
 
     // Call this to fetch the command token
     std::string get_first(bool force_lower = true);
@@ -52,6 +52,9 @@ public:
     // Returns the number of parameters
     int         param_count() {return m_tokens.size() - 1;}
 
+    // This is the raw text of the command
+    std::string raw_text;
+    
 protected:
 
     // Call this to fill in the tokens array
@@ -94,6 +97,9 @@ protected:
 
     // Over-ride this to handle commands
     virtual void handle_command() {}
+
+    // This gets called every time a message is sent out the socket
+    virtual void on_send(const char* s, int length) {}
 
 protected:
 
