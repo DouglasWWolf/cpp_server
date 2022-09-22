@@ -68,7 +68,6 @@ void server_command_t::assign(const char* raw)
 {
     raw_text = raw;
     m_tokens = tokenizer.parse(raw);
-    m_next_index = 1;
 }
 //==========================================================================================================
 
